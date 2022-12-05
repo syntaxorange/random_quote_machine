@@ -9,30 +9,120 @@
   <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 </head>
 <body>
-  <div class="container-fluid">
-    <div id="quote-box" class="well">
-      <div class="row">
-        <div class="col-xs-12">
-          <div id="text" class="center-block text-center"><i class="fas fa-quote-left"></i> Build your own dreams, or someone else will hire you to buld theirs</div>
-          <div id="author" class="text-right">- Farrah Gray</div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-6">
-          <a id="tweet-quote" class="btn btn-default">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a id="tumblr-quote" class="btn btn-default">
-            <i class="fab fa-tumblr"></i>
-          </a>
-        </div>
-        <div class="col-xs-6 text-right">
-          <button type="button" id="new-quote" class="btn btn-default">New quote</button>
-        </div>
-      </div>
-    </div>
+  <div id="container" class="container-fluid">
+    <div id="quote-box" class="well"></div>
   </div>
+  <script type="text/babel">
+    let quotes = [
+      { text: 'Build your own dreams, or someone else will hire you to buld theirs', author: 'Farrah Gray', color: '#73a857'},
+      { text: 'The only way to do great work is to love what you do.', author: 'Steve Jobs', color: '#a52a2a'},
+      { text: 'The mind is everything. What you think you become.', author: 'Buddha', color: '#ffa500'}
+    ];
+
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+
+    class RenderQuote extends React.Component {
+      constructor(props) {
+        super(props);
+      }
+      render() {
+        return (
+          <div className="col-xs-12">
+            <div id="text" className="center-block text-center" style={{color: this.props.color}}>
+                <i className="fas fa-quote-left"></i> {this.props.text}
+            </div>
+            <div id="author" className="text-right" style={{color: this.props.color}}>- {this.props.author}</div>
+          </div>
+        )
+      }
+    }
+
+    class RenderSocial extends React.Component {
+      constructor(props) {
+        super(props);
+      }
+      render() {
+        return (
+          <div className="col-xs-6">
+            <a id="tweet-quote" className="btn btn-default" style={{backgroundColor: this.props.color}}>
+              <i className="fab fa-twitter"></i>
+            </a>
+            <a id="tumblr-quote" className="btn btn-default" style={{backgroundColor: this.props.color}}>
+              <i className="fab fa-tumblr"></i>
+            </a>
+          </div>
+        );
+      }
+    }
+
+    class RenderAddQuote extends React.Component {
+      constructor(props) {
+        super(props);
+      }
+      render() {
+        return (
+          <div className="col-xs-6 text-right">
+            <button type="button" id="new-quote" className="btn btn-default" onClick={this.props.handleClick} style={{backgroundColor: this.props.color}}>New quote</button>
+          </div>
+        );
+      }
+    }
+
+    class App extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          randomQuote: 0
+        }
+        this.handleClick = this.handleClick.bind(this);
+      }
+
+      componentWillMount() {
+        this.setRandomQuote();
+      }
+
+      setRandomQuote() {
+        let n = 0;
+
+        do {
+          n = getRandomInt(quotes.length);
+        } while(n === this.state.randomQuote);
+
+        this.setState({
+          randomQuote: n
+        });
+      }
+
+      handleClick() {
+        this.setRandomQuote();
+      }
+
+      render() {
+        const { text, author, color } = quotes[this.state.randomQuote];
+        document.getElementById('container').style.backgroundColor = color;
+        return (
+          <div>
+            <div className="row">
+              <RenderQuote text={text} author={author} color={color} />
+            </div>
+            <div className="row">
+              <RenderSocial color={color} />
+              <RenderAddQuote handleClick={this.handleClick} color={color} />
+            </div>
+          </div>
+        );
+      }
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('quote-box'));
+    root.render(<App />);
+  </script>
 </body>
 </html>
