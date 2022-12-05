@@ -18,11 +18,16 @@
     <div id="quote-box" class="well"></div>
   </div>
   <script type="text/babel">
-    let quotes = [
-      { text: 'Build your own dreams, or someone else will hire you to buld theirs', author: 'Farrah Gray', color: '#73a857'},
-      { text: 'The only way to do great work is to love what you do.', author: 'Steve Jobs', color: '#a52a2a'},
-      { text: 'The mind is everything. What you think you become.', author: 'Buddha', color: '#ffa500'}
+    const quotes = [
+      { text: 'Build your own dreams, or someone else will hire you to buld theirs', author: 'Farrah Gray'},
+      { text: 'The only way to do great work is to love what you do.', author: 'Steve Jobs'},
+      { text: 'The mind is everything. What you think you become.', author: 'Buddha'},
+      { text: 'Eighty percent of success is showing up.', author: 'Woody Allen' },
+      { text: 'If you’re offered a seat on a rocket ship, don’t ask what seat! Just get on.', author: 'Sheryl Sandberg'},
+      { text: 'Life is what happens to you while you’re busy making other plans.', author: 'John Lennon'},
+      { text: 'A person who never made a mistake never tried anything new.', author: 'Albert Einstein'}
     ];
+    const colors = ['#73a857', '#a52a2a', '#ffa500', '#77b1a9', '#9b59b6', '#fb6964'];
 
     function getRandomInt(max) {
       return Math.floor(Math.random() * max);
@@ -79,33 +84,37 @@
       constructor(props) {
         super(props);
         this.state = {
-          randomQuote: 0
+          randomQuote: 0,
+          randomColor: 0
         }
         this.handleClick = this.handleClick.bind(this);
       }
 
-      componentWillMount() {
-        this.setRandomQuote();
+      componentDidMount() {
+        this.setRandomQuote('randomQuote', quotes.length);
+        this.setRandomQuote('randomColor', colors.length);
       }
 
-      setRandomQuote() {
+      setRandomQuote(key, max) {
         let n = 0;
 
         do {
-          n = getRandomInt(quotes.length);
-        } while(n === this.state.randomQuote);
+          n = getRandomInt(max);
+        } while(n === this.state[key]);
 
         this.setState({
-          randomQuote: n
+          [key]: n
         });
       }
 
       handleClick() {
-        this.setRandomQuote();
+        this.setRandomQuote('randomQuote', quotes.length);
+        this.setRandomQuote('randomColor', colors.length);
       }
 
       render() {
-        const { text, author, color } = quotes[this.state.randomQuote];
+        const { text, author } = quotes[this.state.randomQuote];
+        const color = colors[this.state.randomColor];
         document.getElementById('container').style.backgroundColor = color;
         return (
           <div>
