@@ -51,10 +51,10 @@
       render() {
         return (
           <div className="col-xs-6">
-            <a id="tweet-quote" className="btn btn-default" style={{backgroundColor: this.props.color}}>
+            <a href={`https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text="${this.props.text}." ${this.props.author}`} id="tweet-quote" className="btn btn-default" style={{backgroundColor: this.props.color}}>
               <i className="fab fa-twitter"></i>
             </a>
-            <a id="tumblr-quote" className="btn btn-default" style={{backgroundColor: this.props.color}}>
+            <a href={`https://www.tumblr.com/widgets/share/tool?posttype=quote&tags=quotes,freecodecamp&caption=${this.props.author}&content=${this.props.text}&canonicalUrl=https://www.tumblr.com/buttons&shareSource=tumblr_share_button`} id="tumblr-quote" className="btn btn-default" style={{backgroundColor: this.props.color}}>
               <i className="fab fa-tumblr"></i>
             </a>
           </div>
@@ -113,7 +113,7 @@
               <RenderQuote text={text} author={author} color={color} />
             </div>
             <div className="row">
-              <RenderSocial color={color} />
+              <RenderSocial text={text} author={author} color={color} />
               <RenderAddQuote handleClick={this.handleClick} color={color} />
             </div>
           </div>
